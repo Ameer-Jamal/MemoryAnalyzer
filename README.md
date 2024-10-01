@@ -2,6 +2,9 @@
 
 MemoryAnalyzer is a Python-based GUI tool that allows you to monitor and log CPU and memory usage for a specific process in real-time. It uses `psutil` to track system resources and `PyQt5` for the graphical user interface (GUI). The tool also generates and saves charts showing CPU and memory usage over time.
 
+![image](https://github.com/user-attachments/assets/d5159922-0de2-44af-8453-b65503464bda)
+![image](https://github.com/user-attachments/assets/d1a644e0-a003-42fa-bf5f-28945d8f60e2)
+
 ## Features
 - Monitor CPU and memory usage of a specific process in real-time.
 - Customize monitoring interval in milliseconds.
