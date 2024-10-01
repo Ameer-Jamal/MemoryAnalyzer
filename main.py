@@ -168,41 +168,47 @@ class ProcessMonitorApp(QWidget):
         if not self.times:
             return  # No data to display
 
-        def update_chart(frame):
-            plt.clf()
+        # Convert Unix timestamps to human-readable time format
+        formatted_times = [datetime.fromtimestamp(t) for t in self.times]
 
-            # Convert Unix timestamps to human-readable time format
-            formatted_times = [datetime.fromtimestamp(t) for t in self.times]
+        # Get the current range of times to adjust the x-axis
+        time_min, time_max = min(formatted_times), max(formatted_times)
 
-            # Get the current range of times to adjust the x-axis
-            time_min, time_max = min(formatted_times), max(formatted_times)
+        # Subplot for CPU Usage
+        plt.figure(figsize=(10, 6))
 
-            # Subplot for CPU Usage
-            plt.subplot(2, 1, 1)
-            plt.plot(formatted_times, self.cpu_usage, label="CPU Usage (%)")
-            plt.ylim(0, max(self.cpu_usage) + 5)  # Ensure no negative values on y-axis
-            plt.xlim(time_min, time_max)  # Dynamic x-axis based on time
-            plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%H:%M:%S'))  # Format x-axis
-            plt.gca().xaxis.set_major_locator(mdates.AutoDateLocator())  # Auto format the time ticks
-            plt.legend()
-            plt.title('CPU Usage Over Time')
+        # CPU Usage Plot
+        plt.subplot(2, 1, 1)
+        plt.plot(formatted_times, self.cpu_usage, label="CPU Usage (%)")
+        plt.ylim(0, max(self.cpu_usage) + 5)  # Ensure no negative values on y-axis
+        plt.xlim(time_min, time_max)  # Dynamic x-axis based on time
+        plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%H:%M:%S'))  # Format x-axis
+        plt.gca().xaxis.set_major_locator(mdates.AutoDateLocator())  # Auto format the time ticks
+        plt.legend()
+        plt.title('CPU Usage Over Time')
 
-            # Subplot for Memory Usage in MB
-            plt.subplot(2, 1, 2)
-            plt.plot(formatted_times, self.memory_usage, label="Memory Usage (MB)", color='red')
-            plt.ylim(0, max(self.memory_usage) + 5)  # Dynamic y-axis, no negative values
-            plt.xlim(time_min, time_max)  # Dynamic x-axis based on time
-            plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%H:%M:%S'))  # Format x-axis
-            plt.gca().xaxis.set_major_locator(mdates.AutoDateLocator())  # Auto format the time ticks
-            plt.legend()
-            plt.title('Memory Usage Over Time')
+        # Memory Usage Plot
+        plt.subplot(2, 1, 2)
+        plt.plot(formatted_times, self.memory_usage, label="Memory Usage (MB)", color='red')
+        plt.ylim(0, max(self.memory_usage) + 5)  # Dynamic y-axis, no negative values
+        plt.xlim(time_min, time_max)  # Dynamic x-axis based on time
+        plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%H:%M:%S'))  # Format x-axis
+        plt.gca().xaxis.set_major_locator(mdates.AutoDateLocator())  # Auto format the time ticks
+        plt.legend()
+        plt.title('Memory Usage Over Time')
 
-        fig = plt.figure(figsize=(10, 6))
-        self.ani = FuncAnimation(fig, update_chart, interval=self.interval)
         plt.tight_layout()
 
-        plt.draw()
-        plt.pause(0.001)  # Allow it to process events
+        # Save the chart with a timestamp in the filename
+        timestamp = time.strftime("%Y%m%d-%H%M%S")
+        filename = f"process_monitor_chart_{timestamp}.png"
+        plt.savefig(filename)  # Save the chart with the timestamp
+
+        # Notify the user where the file is saved
+        self.status_label.setText(f"Chart saved as {filename}")
+
+        # Show the chart
+        plt.show()
 
     def save_config(self):
         config = {
