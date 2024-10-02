@@ -55,10 +55,6 @@ python main.py
 # Saved Configurations
 
 The application automatically saves the process name and interval in process_monitor_config.json, allowing it to remember these settings between runs.
-Generated Charts
-
-Once monitoring is stopped, the application generates and saves a chart in the current directory with a timestamp (e.g., process_monitor_chart_YYYYMMDD-HHMMSS.png).
-The chart displays CPU usage (%) and memory usage (in MB) over time.
 
 # Generated Charts
 
