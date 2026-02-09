@@ -1,0 +1,4 @@
+psutil>=5.9
+PyQt5>=5.15
+pyqtgraph>=0.13
+platformdirs>=4.0
